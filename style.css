@@ -1,0 +1,560 @@
+/* =============================================
+   style.css — 価値観カードソート
+   ============================================= */
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── App Layout ── */
+.app {
+  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(160deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+  color: #e0e0e0;
+}
+
+.container {
+  padding: 0 12px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  padding: 14px 16px 6px;
+}
+
+.header__title {
+  font-size: 1.1rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: #a0c4ff;
+}
+
+.header__sub {
+  font-size: 0.6rem;
+  color: #506880;
+  margin-top: 2px;
+}
+
+/* ── Progress ── */
+.progress {
+  margin: 6px 0 10px;
+}
+
+.progress__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #6a7a90;
+  margin-bottom: 3px;
+}
+
+.progress__link {
+  color: #a0c4ff;
+  cursor: pointer;
+}
+
+.progress__done-label {
+  color: #6a9a80;
+}
+
+.progress__track {
+  height: 3px;
+  background: #1e2d4a;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress__fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a0c4ff, #60a0dc);
+  border-radius: 2px;
+  transition: width 0.35s;
+}
+
+.progress__fill--done {
+  background: linear-gradient(90deg, #6a9a80, #8abca0);
+}
+
+/* ── Undo Button ── */
+.btn-undo {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  margin-bottom: 6px;
+  transition: all 0.15s;
+}
+
+.btn-undo--active {
+  background: rgba(160, 196, 255, 0.08);
+  border: 1px solid rgba(160, 196, 255, 0.2);
+  color: #a0c4ff;
+  cursor: pointer;
+}
+
+.btn-undo--inactive {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #3a4a60;
+  cursor: default;
+}
+
+/* ── Card ── */
+.card-area {
+  margin-bottom: 12px;
+}
+
+.card {
+  background: linear-gradient(135deg, #1e2d4a, #253b5c);
+  border: 1px solid #3a5070;
+  border-radius: 12px;
+  padding: 20px 18px;
+  text-align: center;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  margin-bottom: 10px;
+}
+
+.card__ja {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #e8f0ff;
+  margin-bottom: 2px;
+}
+
+.card__en {
+  font-size: 0.68rem;
+  color: #5a7898;
+  margin-bottom: 8px;
+}
+
+.card__desc {
+  font-size: 0.78rem;
+  color: #9ab0c8;
+  line-height: 1.5;
+}
+
+/* ── Sort Buttons ── */
+.sort-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.sort-btn {
+  flex: 1;
+  padding: 12px 4px;
+  border-radius: 9px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.sort-btn--very {
+  color: #e08050;
+  border: 1.5px solid rgba(224, 128, 80, 0.25);
+  background: rgba(224, 128, 80, 0.04);
+}
+.sort-btn--very:hover {
+  background: rgba(224, 128, 80, 0.12);
+  border-color: #e08050;
+}
+
+.sort-btn--somewhat {
+  color: #c0a040;
+  border: 1.5px solid rgba(192, 160, 64, 0.25);
+  background: rgba(192, 160, 64, 0.04);
+}
+.sort-btn--somewhat:hover {
+  background: rgba(192, 160, 64, 0.12);
+  border-color: #c0a040;
+}
+
+.sort-btn--not {
+  color: #6a9a80;
+  border: 1.5px solid rgba(106, 154, 128, 0.25);
+  background: rgba(106, 154, 128, 0.04);
+}
+.sort-btn--not:hover {
+  background: rgba(106, 154, 128, 0.12);
+  border-color: #6a9a80;
+}
+
+/* ── Narrow Panel ── */
+.narrow-panel {
+  margin-bottom: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(160, 196, 255, 0.04);
+  border: 1px solid rgba(160, 196, 255, 0.12);
+}
+
+.narrow-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.narrow-panel__title {
+  font-size: 0.8rem;
+  color: #9ab0c8;
+}
+
+.narrow-panel__title strong {
+  color: #a0c4ff;
+}
+
+.narrow-panel__count {
+  font-size: 0.72rem;
+  color: #5a7898;
+}
+
+.narrow-panel__count--full {
+  color: #e08050;
+}
+
+.narrow-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.narrow-tag {
+  padding: 5px 11px;
+  border-radius: 7px;
+  border: 1px solid #2a3a5a;
+  background: rgba(255, 255, 255, 0.02);
+  color: #8a9ab0;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.narrow-tag--selected {
+  border: 2px solid #a0c4ff;
+  background: rgba(160, 196, 255, 0.1);
+  color: #a0c4ff;
+}
+
+.narrow-tag--disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.narrow-panel__footer {
+  text-align: right;
+  margin-top: 8px;
+}
+
+.btn-close {
+  padding: 5px 14px;
+  border-radius: 6px;
+  background: rgba(160, 196, 255, 0.08);
+  border: 1px solid rgba(160, 196, 255, 0.2);
+  color: #a0c4ff;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+/* ── Tier Sections ── */
+/*
+  カラーシステム: CSS カスタムプロパティ --c: R,G,B を使用
+  例) .tier--very { --c: 224,128,80; }
+      border: 1px solid rgba(var(--c), 0.12);
+*/
+.tiers {
+  margin-top: 4px;
+}
+
+.tier {
+  margin-bottom: 8px;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s;
+  border: 1px solid rgba(var(--c), 0.12);
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.tier--has-items {
+  background: rgba(var(--c), 0.06);
+}
+
+/* Per-tier color variables */
+.tier--top      { --c: 160, 196, 255; }
+.tier--very     { --c: 224, 128, 80;  }
+.tier--somewhat { --c: 192, 160, 64;  }
+.tier--not      { --c: 106, 154, 128; }
+
+.tier__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tier__label-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tier__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgb(var(--c));
+}
+
+.tier__badge {
+  font-size: 0.65rem;
+  color: rgba(var(--c), 0.53);
+  background: rgba(var(--c), 0.15);
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+.tier__chevron {
+  font-size: 0.6rem;
+  color: #4a5a70;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.tier__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* Preview (collapsed) */
+.tier__preview {
+  padding: 0 14px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.tier__preview-tag {
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(var(--c), 0.10);
+  color: rgba(var(--c), 0.80);
+  font-size: 0.6rem;
+}
+
+.tier__more {
+  font-size: 0.6rem;
+  color: #4a5a70;
+}
+
+/* Expanded content */
+.tier__content {
+  padding: 0 14px 12px;
+}
+
+.tier__empty {
+  font-size: 0.68rem;
+  color: #3a4a60;
+  padding: 4px 0;
+}
+
+.tier-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tier-item__tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: rgba(var(--c), 0.12);
+  border: 1px solid rgba(var(--c), 0.25);
+  color: rgb(var(--c));
+}
+
+.tier-item__tag--selected {
+  background: rgba(var(--c), 0.35);
+  border-color: rgb(var(--c));
+}
+
+.tier-item__tag--readonly {
+  cursor: default;
+}
+
+.tier-item__icon {
+  margin-left: 4px;
+  font-size: 0.55rem;
+  opacity: 0.5;
+}
+
+/* Move menu */
+.move-menu {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(10, 18, 38, 0.9);
+  border: 1px solid rgba(160, 196, 255, 0.15);
+}
+
+.move-menu__label {
+  font-size: 0.68rem;
+  color: #8a9ab0;
+  margin-bottom: 6px;
+}
+
+.move-menu__buttons {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.move-btn {
+  padding: 4px 11px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.move-btn--top      { color: #a0c4ff; background: rgba(160, 196, 255, 0.09); border: 1px solid rgba(160, 196, 255, 0.25); }
+.move-btn--very     { color: #e08050; background: rgba(224, 128, 80,  0.09); border: 1px solid rgba(224, 128, 80,  0.25); }
+.move-btn--somewhat { color: #c0a040; background: rgba(192, 160, 64,  0.09); border: 1px solid rgba(192, 160, 64,  0.25); }
+.move-btn--not      { color: #6a9a80; background: rgba(106, 154, 128, 0.09); border: 1px solid rgba(106, 154, 128, 0.25); }
+
+.tier__hint {
+  margin-top: 6px;
+  font-size: 0.6rem;
+  color: #3a4a60;
+  font-style: italic;
+}
+
+/* ── Save Section ── */
+.save-section {
+  margin-top: 16px;
+  padding: 16px 14px;
+  border-radius: 10px;
+  background: rgba(160, 196, 255, 0.04);
+  border: 1px solid rgba(160, 196, 255, 0.1);
+}
+
+.save-section__title {
+  font-size: 0.76rem;
+  color: #8a9ab0;
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.save-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-download {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #a0c4ff, #6090cc);
+  color: #0f1a2e;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-copy {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 155px;
+  background: rgba(160, 196, 255, 0.1);
+  color: #a0c4ff;
+  border: 1px solid rgba(160, 196, 255, 0.25);
+}
+
+.btn-copy--done {
+  background: rgba(106, 154, 128, 0.3);
+  color: #8abca0;
+  border-color: #6a9a80;
+}
+
+.save-section__preview-toggle {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.btn-text-toggle {
+  background: none;
+  border: none;
+  color: #5a7090;
+  font-size: 0.68rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.text-preview {
+  margin-top: 8px;
+  background: rgba(10, 15, 30, 0.6);
+  border: 1px solid rgba(160, 196, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.6rem;
+  color: #8a9ab0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 260px;
+  overflow-y: auto;
+  font-family: 'Noto Sans JP', monospace;
+  user-select: all;
+}
+
+/* ── Bottom Actions ── */
+.bottom-actions {
+  text-align: center;
+  margin-top: 14px;
+  margin-bottom: 20px;
+}
+
+.btn-restart {
+  padding: 9px 24px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid #2a3a5a;
+  color: #6a8098;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-restart:hover {
+  border-color: #4a6088;
+  color: #8aa0b8;
+}
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  padding: 12px 0 20px;
+  font-size: 0.55rem;
+  color: #2a3a50;
+}
