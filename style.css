@@ -139,50 +139,162 @@
   line-height: 1.5;
 }
 
-/* ── Sort Buttons ── */
-.sort-buttons {
-  display: flex;
-  gap: 6px;
+/* ── Card: ドラッグ対応 ── */
+.card--draggable {
+  cursor: grab;
+  transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
 }
 
-.sort-btn {
+.card--draggable:active {
+  cursor: grabbing;
+}
+
+.card--dragging {
+  opacity: 0.45;
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card__drag-hint {
+  font-size: 0.58rem;
+  color: #3a5070;
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+}
+
+/* ── Sort Boxes ── */
+.sort-boxes {
+  display: flex;
+  gap: 8px;
+  transition: gap 0.2s;
+}
+
+/* ドラッグ中はボックスを少し広げる */
+.sort-boxes--active {
+  gap: 10px;
+}
+
+.sort-box {
   flex: 1;
-  padding: 12px 4px;
-  border-radius: 9px;
-  font-size: 0.78rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px 6px 14px;
+  min-height: 110px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+  border: 2px dashed rgba(var(--c), 0.35);
+  background: rgba(var(--c), 0.04);
+  color: rgb(var(--c));
+  user-select: none;
+}
+
+.sort-box:hover {
+  border-style: solid;
+  background: rgba(var(--c), 0.10);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(var(--c), 0.18);
+}
+
+/* ドラッグホバー中 */
+.sort-box--dragover {
+  border-style: solid;
+  border-width: 2px;
+  background: rgba(var(--c), 0.18);
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 10px 30px rgba(var(--c), 0.30);
+}
+
+.sort-box--very     { --c: 224, 128, 80;  }
+.sort-box--somewhat { --c: 192, 160, 64;  }
+.sort-box--not      { --c: 106, 154, 128; }
+
+.sort-box__icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.sort-box__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.sort-box__hint {
+  font-size: 0.52rem;
+  opacity: 0.45;
+  text-align: center;
+}
+
+/* ── Top10 バナー ── */
+.top10-banner {
+  margin-bottom: 16px;
+  padding: 20px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(160,196,255,0.09), rgba(160,196,255,0.03));
+  border: 1.5px solid rgba(160, 196, 255, 0.30);
+  text-align: center;
+  animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.top10-banner__icon {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  color: #a0c4ff;
+}
+
+.top10-banner__title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #a0c4ff;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.top10-banner__desc {
+  font-size: 0.75rem;
+  color: #6a7a90;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.top10-banner__desc strong {
+  color: #a0c4ff;
+}
+
+.top10-banner__count {
+  color: #e08050;
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0 2px;
+}
+
+.btn-top10 {
+  padding: 11px 32px;
+  border-radius: 8px;
+  background: rgba(160, 196, 255, 0.12);
+  border: 1.5px solid rgba(160, 196, 255, 0.45);
+  color: #a0c4ff;
+  font-size: 0.88rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
 }
 
-.sort-btn--very {
-  color: #e08050;
-  border: 1.5px solid rgba(224, 128, 80, 0.25);
-  background: rgba(224, 128, 80, 0.04);
-}
-.sort-btn--very:hover {
-  background: rgba(224, 128, 80, 0.12);
-  border-color: #e08050;
-}
-
-.sort-btn--somewhat {
-  color: #c0a040;
-  border: 1.5px solid rgba(192, 160, 64, 0.25);
-  background: rgba(192, 160, 64, 0.04);
-}
-.sort-btn--somewhat:hover {
-  background: rgba(192, 160, 64, 0.12);
-  border-color: #c0a040;
-}
-
-.sort-btn--not {
-  color: #6a9a80;
-  border: 1.5px solid rgba(106, 154, 128, 0.25);
-  background: rgba(106, 154, 128, 0.04);
-}
-.sort-btn--not:hover {
-  background: rgba(106, 154, 128, 0.12);
-  border-color: #6a9a80;
+.btn-top10:hover {
+  background: rgba(160, 196, 255, 0.22);
+  border-color: #a0c4ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(160, 196, 255, 0.15);
 }
 
 /* ── Narrow Panel ── */

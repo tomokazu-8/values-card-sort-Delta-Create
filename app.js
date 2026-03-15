@@ -118,6 +118,10 @@ function App() {
   const [showNarrow,  setShowNarrow]  = useState(false);
   const [expandedCat, setExpandedCat] = useState(null);
 
+  // ドラッグ状態
+  const [dragging,  setDragging]  = useState(false);
+  const [dragOver,  setDragOver]  = useState(null); // どのボックスにホバー中か
+
   const cur      = deck[0] || null;
   const done     = deck.length === 0;
   const total    = VALUES.length;
@@ -192,6 +196,33 @@ function App() {
 
   const handleDownload = () => { try { dlImage(sorted, topTen); } catch(e) { console.error(e); } };
 
+  // ドラッグ & ドロップ ハンドラ
+  const handleDragStart = (e) => {
+    e.dataTransfer.effectAllowed = 'move';
+    setDragging(true);
+  };
+  const handleDragEnd = () => {
+    setDragging(false);
+    setDragOver(null);
+  };
+  const handleBoxDragEnter = (k, e) => {
+    e.preventDefault();
+    setDragOver(k);
+  };
+  const handleBoxDragOver = (e) => {
+    e.preventDefault(); // ドロップを許可するために必須
+  };
+  const handleBoxesLeave = (e) => {
+    // ボックス群の外に出たときだけリセット
+    if (!e.currentTarget.contains(e.relatedTarget)) setDragOver(null);
+  };
+  const handleBoxDrop = (k, e) => {
+    e.preventDefault();
+    setDragging(false);
+    setDragOver(null);
+    sortCard(k);
+  };
+
   const veryRest = sorted.very.filter(v => !topTen.find(x => x.id === v.id));
   const allTiers = [
     { key: 'top',      label: `★ トップ${topTen.length}`,  items: topTen,                                    show: topTen.length > 0 },
@@ -201,6 +232,9 @@ function App() {
   ];
 
   const getMoveTargets = (fromKey) => ['top', 'very', 'somewhat', 'not'].filter(k => k !== fromKey);
+
+  // トップ10バナーの表示条件
+  const showTop10Banner = done && sorted.very.length > 10 && !showNarrow;
 
   return (
     <div className="app">
@@ -217,8 +251,6 @@ function App() {
           <div className="progress__labels">
             <span>{progress}/{total} 完了</span>
             {!done && <span>残り {deck.length} 枚</span>}
-            {done && !showNarrow && sorted.very.length > 10 &&
-              <span className="progress__link" onClick={() => setShowNarrow(true)}>トップ10を選ぶ →</span>}
             {done && <span className="progress__done-label">✓ 仕分け完了</span>}
           </div>
           <div className="progress__track">
@@ -229,9 +261,10 @@ function App() {
           </div>
         </div>
 
-        {/* ── 仕分けカード ── */}
+        {/* ── 仕分けカード（ドラッグ対応） ── */}
         {!done && (
           <div className="card-area">
+            {/* 戻るボタン */}
             <div>
               <button
                 onClick={undo}
@@ -241,18 +274,58 @@ function App() {
                 ← 戻る
               </button>
             </div>
-            <div className="card">
+
+            {/* カード（つかんで移動可能） */}
+            <div
+              className={`card card--draggable${dragging ? ' card--dragging' : ''}`}
+              draggable={true}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            >
+              <div className="card__drag-hint">つかんで下のボックスへ</div>
               <div className="card__ja">{cur.ja}</div>
               <div className="card__en">{cur.en}</div>
               <div className="card__desc">{cur.desc}</div>
             </div>
-            <div className="sort-buttons">
+
+            {/* ソートボックス（クリック or ドロップ） */}
+            <div
+              className={`sort-boxes${dragging ? ' sort-boxes--active' : ''}`}
+              onDragLeave={handleBoxesLeave}
+            >
               {CAT_KEYS.map(k => (
-                <button key={k} onClick={() => sortCard(k)} className={`sort-btn sort-btn--${k}`}>
-                  {CATS[k].icon} {CATS[k].label}
-                </button>
+                <div
+                  key={k}
+                  className={`sort-box sort-box--${k}${dragOver === k ? ' sort-box--dragover' : ''}`}
+                  onDragEnter={(e) => handleBoxDragEnter(k, e)}
+                  onDragOver={handleBoxDragOver}
+                  onDrop={(e) => handleBoxDrop(k, e)}
+                  onClick={() => sortCard(k)}
+                >
+                  <div className="sort-box__icon">{CATS[k].icon}</div>
+                  <div className="sort-box__label">{CATS[k].label}</div>
+                  <div className="sort-box__hint">クリックまたはドロップ</div>
+                </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* ── トップ10バナー（完了後・大切が10枚超のとき） ── */}
+        {showTop10Banner && (
+          <div className="top10-banner">
+            <div className="top10-banner__icon">★</div>
+            <div className="top10-banner__title">核心的価値観を絞り込みましょう</div>
+            <div className="top10-banner__desc">
+              「とても大切」に
+              <span className="top10-banner__count">{sorted.very.length}個</span>
+              選びました。<br />
+              その中からさらに<strong>トップ10</strong>を選ぶことで、<br />
+              本当に大切な価値観が明確になります。
+            </div>
+            <button className="btn-top10" onClick={() => setShowNarrow(true)}>
+              トップ10を選ぶ →
+            </button>
           </div>
         )}
 
@@ -298,7 +371,6 @@ function App() {
                 key={tier.key}
                 className={`tier tier--${tier.key}${tier.items.length ? ' tier--has-items' : ''}`}
               >
-                {/* ヘッダー（クリックで開閉） */}
                 <div className="tier__header" onClick={() => setExpandedCat(isExpanded ? null : tier.key)}>
                   <div className="tier__label-group">
                     <span className="tier__label">{tier.label}</span>
@@ -307,7 +379,6 @@ function App() {
                   <span className={`tier__chevron${isExpanded ? ' tier__chevron--open' : ''}`}>▼</span>
                 </div>
 
-                {/* 折りたたみ時: タグプレビュー */}
                 {!isExpanded && tier.items.length > 0 && (
                   <div className="tier__preview">
                     {tier.items.slice(0, 20).map(v => (
@@ -317,7 +388,6 @@ function App() {
                   </div>
                 )}
 
-                {/* 展開時: 移動操作付きリスト */}
                 {isExpanded && (
                   <div className="tier__content">
                     {tier.items.length === 0 && <div className="tier__empty">カードがありません</div>}
@@ -338,7 +408,6 @@ function App() {
                       })}
                     </div>
 
-                    {/* 移動先メニュー */}
                     {canEdit && moveTarget && moveTarget.fromCat === tier.key && (
                       <div className="move-menu">
                         <div className="move-menu__label">「{moveTarget.card.ja}」を移動 →</div>
